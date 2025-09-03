@@ -1,0 +1,150 @@
+// Smooth scrolling for navigation links
+document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Form submission handling
+const contactForm = document.querySelector('.contact-form');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // In a real application, you would handle form submission to a server here
+    alert('Thank you for your message! I will get back to you soon.');
+    contactForm.reset();
+});
+
+// Add animation to sections when they come into view
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('section').forEach(section => {
+    section.style.opacity = 0;
+    section.style.transform = 'translateY(50px)';
+    section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(section);
+});
+
+// Create additional floating flowers
+function createFloatingFlowers() {
+    const flowers = ['🌸', '🌹', '🌺', '🌼', '💮', '🏵️'];
+    const body = document.querySelector('body');
+    
+    for (let i = 0; i < 10; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'floating-flower';
+        flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        
+        // Random position
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        
+        flower.style.top = `${top}%`;
+        flower.style.left = `${left}%`;
+        
+        // Random animation delay
+        flower.style.animationDelay = `${Math.random() * 5}s`;
+        
+        body.appendChild(flower);
+    }
+}
+
+createFloatingFlowers();
+
+// Add scroll progress indicator
+window.addEventListener('scroll', function() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    
+    // Update a progress bar if exists, or create one
+    let progressBar = document.getElementById('progress-bar');
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.id = 'progress-bar';
+        progressBar.style.position = 'fixed';
+        progressBar.style.top = '0';
+        progressBar.style.left = '0';
+        progressBar.style.height = '5px';
+        progressBar.style.background = 'linear-gradient(90deg, #d46a6a, #ffb6c1)';
+        progressBar.style.zIndex = '1000';
+        progressBar.style.transition = 'width 0.2s ease';
+        document.body.appendChild(progressBar);
+    }
+    
+    progressBar.style.width = scrolled + '%';
+});
+
+// Add subtle cursor flower effect
+document.addEventListener('mousemove', function(e) {
+    let cursorFlower = document.getElementById('cursor-flower');
+    if (!cursorFlower) {
+        cursorFlower = document.createElement('div');
+        cursorFlower.id = 'cursor-flower';
+        cursorFlower.style.position = 'fixed';
+        cursorFlower.style.pointerEvents = 'none';
+        cursorFlower.style.zIndex = '9999';
+        cursorFlower.style.fontSize = '20px';
+        cursorFlower.style.color = '#d46a6a';
+        cursorFlower.style.opacity = '0.7';
+        cursorFlower.textContent = '🌸';
+        document.body.appendChild(cursorFlower);
+    }
+    
+    cursorFlower.style.left = (e.pageX + 10) + 'px';
+    cursorFlower.style.top = (e.pageY + 10) + 'px';
+});
+
+// Add loading animation
+window.addEventListener('load', function() {
+    const loader = document.createElement('div');
+    loader.style.position = 'fixed';
+    loader.style.top = '0';
+    loader.style.left = '0';
+    loader.style.width = '100%';
+    loader.style.height = '100%';
+    loader.style.background = 'linear-gradient(135deg, #fff5e6 0%, #ffe6f2 100%)';
+    loader.style.display = 'flex';
+    loader.style.justifyContent = 'center';
+    loader.style.alignItems = 'center';
+    loader.style.zIndex = '2000';
+    loader.style.transition = 'opacity 0.5s ease';
+    
+    const flowerLoader = document.createElement('div');
+    flowerLoader.style.fontSize = '60px';
+    flowerLoader.style.color = '#d46a6a';
+    flowerLoader.textContent = '🌸';
+    flowerLoader.style.animation = 'pulse 1s infinite';
+    
+    loader.appendChild(flowerLoader);
+    document.body.appendChild(loader);
+    
+    // Remove loader after page loads
+    setTimeout(function() {
+        loader.style.opacity = '0';
+        setTimeout(function() {
+            document.body.removeChild(loader);
+        }, 500);
+    }, 1500);
+});
